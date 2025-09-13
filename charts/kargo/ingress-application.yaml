@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kargo
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: kargo
+#    repoURL: https://kubernetes.github.io/ingress-nginx
+    repoURL: oci://ghcr.io/akuity/kargo-charts/kargo
+    targetRevision: 4.13.2
+    helm:
+      releaseName: kargo
+      parameters:
+      - name: "api.adminAccount.passwordHash"
+        value: '$2y$10$IAyHxfH0kw1bBREtGzIuwekBMs0VoX/l0qcdHhcGHna1Ni0pdTuLm'
+      - name: "api.adminAccount.tokenSigningKey"
+        value: '4igP6EdYC2irHqdqWToGzv9JVaplbfs9'
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kargo
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
