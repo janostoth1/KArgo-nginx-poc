@@ -33,8 +33,8 @@ spec:
           path: charts/{{.path.basename}}
         #   helm:
         #     valueFiles:
-        #       - $values/TST/{{.path.basename}}_values.yaml
         #       - $values/TST/global_values.yaml
+        #       - $values/TST/{{.path.basename}}_values.yaml
         # - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
         #   targetRevision: develop
         #   ref: values
