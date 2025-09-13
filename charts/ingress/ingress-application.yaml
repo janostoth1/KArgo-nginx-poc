@@ -13,7 +13,7 @@ spec:
       releaseName: ingress-nginx
       parameters:
       - name: "controller.service.type"
-        value: LoadBalancer
+        value: ClusterIP
   destination:
     server: "https://kubernetes.default.svc"
     namespace: default
