@@ -12,7 +12,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/janostoth1/KArgo-nginx-poc.git
-        revision: master
+        revision: main
         directories:
           - path: charts/*
           # - path: ENAP/umbrella-helm-chart/charts/haproxy-monitoring
@@ -29,7 +29,7 @@ spec:
         namespace: app
       sources:
         - repoURL: https://github.com/janostoth1/KArgo-nginx-poc.git
-          targetRevision: master
+          targetRevision: main
           path: charts/{{.path.basename}}
         #   helm:
         #     valueFiles:
