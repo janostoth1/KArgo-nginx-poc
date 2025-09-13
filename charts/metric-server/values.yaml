@@ -1,0 +1,18 @@
+# Pin image tag to a specific version (avoid Chart.AppVersion)
+image:
+  tag: "v0.8.0"
+
+# High Availability mode
+replicas: 2
+
+args:
+  - --kubelet-insecure-tls
+
+# See https://github.com/kubernetes-sigs/metrics-server#scaling
+resources:
+  requests:
+    cpu: "100m"
+    memory: "200Mi"
+  limits:
+    cpu: "100m"
+    memory: "200Mi"

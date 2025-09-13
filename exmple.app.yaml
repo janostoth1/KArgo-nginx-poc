@@ -71,16 +71,16 @@ spec:
           targetRevision: develop
           ref: values
     {{- end }}
-    {{- if eq .path.basename "metrics-server" }}
-    spec:
-      sources:
-        - repoURL: https://kubernetes-sigs.github.io/metrics-server/
-          chart: metrics-server
-          targetRevision: 3.13.0
-          helm:
-            valueFiles:
-              - $values/TST/metrics-server_values.yaml
-        - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
-          targetRevision: develop
-          ref: values
-    {{- end }}
+    # {{- if eq .path.basename "metrics-server" }}
+    # spec:
+    #   sources:
+    #     - repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    #       chart: metrics-server
+    #       targetRevision: 3.13.0
+    #       helm:
+    #         valueFiles:
+    #           - $values/TST/metrics-server_values.yaml
+    #     - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
+    #       targetRevision: develop
+    #       ref: values
+    # {{- end }}
