@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: applicationset
+#  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/syncPolicy # to allow temporarily disable auto-sync for a specific Application
+  generators:
+    - git:
+        repoURL: https://github.com/janostoth1/KArgo-nginx-poc.git
+        revision: master
+        directories:
+          - path: charts/*
+          # - path: ENAP/umbrella-helm-chart/charts/haproxy-monitoring
+          #   exclude: true
+          #- path: ENAP/umbrella-helm-chart/charts/version-overview
+          #  exclude: true
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: app
+      sources:
+        - repoURL: https://github.com/janostoth1/KArgo-nginx-poc.git
+          targetRevision: master
+          path: charts/{{.path.basename}}
+        #   helm:
+        #     valueFiles:
+        #       - $values/TST/{{.path.basename}}_values.yaml
+        #       - $values/TST/global_values.yaml
+        # - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
+        #   targetRevision: develop
+        #   ref: values
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+  templatePatch: |
+    {{- if eq .path.basename "kafka" }}
+    spec:
+      sources:
+        - repoURL: registry-1.docker.io/bitnamicharts
+          chart: kafka
+          targetRevision: 32.1.3
+          helm:
+            valueFiles:
+              - $values/TST/kafka_values.yaml
+        - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
+          targetRevision: develop
+          ref: values
+    {{- end }}
+    {{- if contains "-mongodb" .path.basename }}
+    spec:
+      sources:
+        - repoURL: registry-1.docker.io/bitnamicharts
+          chart: mongodb
+          targetRevision: 16.5.43
+          helm:
+            valueFiles:
+              - $values/TST/{{.path.basename}}_values.yaml
+        - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
+          targetRevision: develop
+          ref: values
+    {{- end }}
+    {{- if eq .path.basename "metrics-server" }}
+    spec:
+      sources:
+        - repoURL: https://kubernetes-sigs.github.io/metrics-server/
+          chart: metrics-server
+          targetRevision: 3.13.0
+          helm:
+            valueFiles:
+              - $values/TST/metrics-server_values.yaml
+        - repoURL: https://gitlab.sgmdev.hu/medusa/enap/infra-values.git
+          targetRevision: develop
+          ref: values
+    {{- end }}
