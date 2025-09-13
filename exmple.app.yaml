@@ -15,8 +15,8 @@ spec:
         revision: main
         directories:
           - path: charts/*
-          # - path: ENAP/umbrella-helm-chart/charts/haproxy-monitoring
-          #   exclude: true
+          - path:  charts/argo-cd
+            exclude: true
           #- path: ENAP/umbrella-helm-chart/charts/version-overview
           #  exclude: true
   template:
