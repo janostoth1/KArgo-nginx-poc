@@ -11,6 +11,9 @@ spec:
     targetRevision: 4.13.2
     helm:
       releaseName: ingress-nginx
+      parameters:
+      - name: "controller.service.type"
+        value: LoadBalancer
   destination:
     server: "https://kubernetes.default.svc"
     namespace: default
