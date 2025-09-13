@@ -1,40 +1,25 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: cert-manager
-#   namespace: argocd
-# spec:
-#   project: default
-#   source:
-#     path: .
-#     chart: cert-manager
-#     #repoURL: oci://quay.io/jetstack/charts/cert-manager
-#     repoURL: quay.io/jetstack/charts/cert-manager
-#     targetRevision: v1.18.2
-#     helm:
-#       releaseName: cert-manager
-#   destination:
-#     server: "https://kubernetes.default.svc"
-#     namespace: default
-#   syncPolicy:
-#     automated:
-#       selfHeal: true
-#       prune: true
-
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx
+  name: cert-manager
+  namespace: argocd
 spec:
   project: default
   source:
     path: .
-    repoURL: oci://registry-1.docker.io/bitnamicharts/nginx 
-    targetRevision: 15.9.0
+    chart: cert-manager
+    #repoURL: oci://quay.io/jetstack/charts/cert-manager
+    repoURL: https://charts.jetstack.io
+    #repoURL: quay.io/jetstack/charts/cert-manager
+    targetRevision: v1.18.2
     helm:
-      valuesObject:
-        some-value: foo
+      releaseName: cert-manager
   destination:
-    name: "in-cluster"
-    namespace: nginx
+    server: "https://kubernetes.default.svc"
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
